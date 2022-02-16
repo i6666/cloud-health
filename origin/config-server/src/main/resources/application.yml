@@ -1,0 +1,13 @@
+server:
+  port: 8888
+spring:
+  cloud:
+    config:
+      server:
+        native:
+          searchLocations: classpath:springhealthconfig/
+            classpath:springhealthconfig/userservice,
+            classpath:springhealthconfig/deviceservice,
+            classpath:springhealthconfig/interventionservice
+      discovery:
+        enabled: true

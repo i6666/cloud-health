@@ -1,0 +1,43 @@
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    registerWithEureka: true
+    fetchRegistry: true
+
+
+spring:
+  cloud:
+    gateway:
+      discovery:
+       locator:
+         enabled: true
+
+      routes:
+      - id: userroute # id 配置项指定了这条路由信息的编号
+        uri: lb://userservice #“lb”代表负载均衡LoadBalance
+        predicates:
+        - Path=/user/** #“/user”开头的请求都将被路由到这条路径中
+        filters:
+        - RewritePath=/user/(?<path>.*), /$\{path}
+            #- PrefixPath=/prefix #为路径添加前缀（Prefix）
+
+      - id: deviceroute # id 配置项指定了这条路由信息的编号
+        uri: lb://deviceservice #“lb”代表负载均衡LoadBalance
+        predicates:
+        - Path=/device/** #“/user”开头的请求都将被路由到这条路径中
+        filters:
+        - RewritePath=/device/(?<path>.*), /$\{path}
+          #- PrefixPath=/prefix #为路径添加前缀（Prefix）
+
+      - id: interventionroute # id 配置项指定了这条路由信息的编号
+        uri: lb://interventionroute #“lb”代表负载均衡LoadBalance
+        predicates:
+        - Path=/intervention/** #“/user”开头的请求都将被路由到这条路径中
+        filters:
+        - RewritePath=/intervention/(?<path>.*), /$\{path}
+            #- PrefixPath=/prefix #为路径添加前缀（Prefix）
+server:
+  port: 5555
